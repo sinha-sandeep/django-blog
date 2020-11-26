@@ -1,0 +1,40 @@
+{% extends 'blog/base.html' %}
+
+{% block title_block %}
+SANDEEP'S BLOG HOME PAGE
+{% endblock %}
+{% block content_block %}
+<h1>SANDEEP'S BLOG</h1>
+
+{%if tag%}
+<h2>Post tag with {{tag.name}}</h2>
+{%endif%}
+
+{% for x in post_list%}
+<ul>
+  <a href="{{x.get_absolute_url}}"><h3>{{x.title}}</h3></a>
+<h2 id='date' >publish on {{x.publish}}by {{x.auther|title}}  </h2>
+{{x.body|truncatewords:30|linebreaks}}
+<p>Tags:{%for tag in x.tags.all%}
+  <a href="{%url "post_list_by_tag_name" tag.slug   %}"class ='btn-primary:hover'>{{tag.name}}</a>
+
+
+{%endfor%}
+</p>
+</ul>
+
+{% endfor %}
+<div class="Paginator">
+  {% if post_list.has_previous %}
+
+  <a href="?page={{post_list.previous_page_number}}"> previous</a>
+  {%endif%}
+
+  <samp>{{post_list.number}}of {{post_list.paginator.num_pages}}</samp>
+  {% if post_list.has_next  %}
+  <a href="?page={{post_list.next_page_number}}">next</a>
+  {%endif%}
+
+</div>
+
+{%endblock %}

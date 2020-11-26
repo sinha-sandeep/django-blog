@@ -1,0 +1,46 @@
+{% extends 'blog/base.html' %}
+
+{% block title_block %}
+{{post.title}}
+{% endblock %}
+{% block content_block %}
+<a href="/"><h1>SANDEEP'S BLOG</h1></a>
+<h1 >{{post.title}}</h1>
+<p id='date'>publish on {{post.publish}} by &nbsp {{post.auther|title}}   </p>
+
+{{post.body|linebreaks}}
+
+<h2>similar_post</h2>
+{% if similiar_post %}
+{% for post in similiar_post %}
+<h3><a href="{{post.get_absolute_url}}">{{post.title}}</a></h3>
+{%endfor %}
+{% else %}
+<p>no similar posts yet</p>
+
+{%endif %}
+{% with comments.count as comments_count%}
+<h2>{{comments_count}}comment{{comments_count|pluralize}}</h2>
+{%endwith%}
+{% if comments %}
+{%for comment in comments%}
+<p id='ch'>comment{{forloop.count}} by {{comment.name}} on{{comment.created}} </p>
+<div class="cb">
+{{comment.comment|linebreaks}}
+</div>
+{% endfor %}
+{% else %}
+<p>there are no comments yet</p>
+{% endif %}
+{%if csubmit %}
+<h2>comment added succefully</h2>
+{%else%}
+<form align="center" method="post">
+  {{ form.as_p }}
+
+  {%csrf_token%}
+  <input type="submit" name="" value="submit comment">
+</form>
+{%endif%}
+
+{%endblock %}
